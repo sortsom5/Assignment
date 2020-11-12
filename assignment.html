@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>assignment</title>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  	
+  	<script src="js/jquery-3.5.1.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="t-lable"> $ប្រព័ន្ធបង់រំលោះ</div>
+		<form >
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+    			<label class="input-group-text" for="inputGroupSelect01">ប្រាក់កម្ចី៖</label>
+  				</div>
+  				<input type="text" class="form-control" id="loanMoney"aria-label="Text input with dropdown button"​ placeholder="ប្រាក់ដើម">
+			</div>
+			<div class="input-group mb-3">
+  			<div class="input-group-prepend">
+    			<label class="input-group-text" for="inputGroupSelect01">អត្រាការប្រាក់ក្នុងមួយឆ្នាំ៖</label>
+  			</div>
+  				<input type="text" class="form-control" id="rateMoney" aria-label="Text input with dropdown button"​  placeholder="អត្រាការប្រាក់">
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<label class="input-group-text" for="inputGroupSelect01">រយៈពេលបង់រំលោះ(គិតជាឆ្នាំ)៖</label>
+				</div>
+				<select class="custom-select" id="timeYear">
+					<option >សូមជ្រើសរើសរយៈពេល</option>
+					<option value="1">១</option>
+					<option value="2">២</option>
+					<option value="3">៣</option>
+					<option value="4">៤</option>
+					<option value="5">៥</option>
+					<option value="6">៦</option>
+					<option value="7">៧</option>
+					<option value="8">៨</option>
+					<option value="9">៩</option>
+					<option value="10">១០</option>
+				</select>
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<label class="input-group-text" for="inputGroupSelect01">រំលោះជា៖</label>
+				</div>
+				<select class="custom-select" id="payment">
+					<option >សូមជ្រើសរើសការបង់</option>
+					<option value="ខែ">ប្រចាំខែ</option>
+					<option value="ឆ្នាំ">ប្រចាំឆ្នាំ</option>
+				</select>
+			</div>
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+    				<label class="input-group-text" for="inputGroupSelect01">កាលបរិច្ចេទចាប់ផ្តើមរំលោះ៖</label>
+  				</div>
+  				<input type="date" class="form-control" id="depreciateDate" aria-label="Text input with dropdown button">
+			</div>
+			
+			</form>
+			<input type="submit" id="tbshow" value="បង្ហាញតារាងបង់ប្រាក់">
+			<div style="height: 1rem;"></div>
+			<div class="table-show" >
+				<div class="panel panel-default">
+			      <div class="panel-heading">តារាងបង់ប្រាក់</div>
+			      		<div class="panel-text">
+			      			<p >ប្រាក់កម្ចី៖<span id="desLoanMoney" >N/A</span></p>
+				      		<p>អត្រាការប្រាក់(ក្នុងមួយឆ្នាំ)៖<span id="desRateMoney">N/A</span>ភាគរយ</p>
+				      		<p>រយៈពេល(គិតជាឆ្នាំ៖<span id="desTimeYear">N/Aឆ្នាំ</span></p>
+				      		<p>បង់ប្រចាំ៖<span id="desPayment">N/A</span></p>
+				      		<p>កាលបរិច្ឆេទ៖<span id="DesDepreciateDate">N/A</span></p>
+			      		</div>
+			         	
+			      		<table id="tableData">
+						  
+						    </table>
+						
+			    </div>
+			   
+
+			</div>
+	</div>	
+	<script>
+	$(document).ready(function(){
+    $('#tableData').hide();
+    $("#tbshow").click(function(){
+      $('#tableData').show();
+      
+      // get value for input form
+      var loanMoney = $('#loanMoney').val();
+      var rateMoney =$('#rateMoney').val();
+      var timeYear = $("#timeYear option:selected").val();
+      var payment = $('#payment option:selected').val();
+      var depreciateDate = $('#depreciateDate').val();
+    // display decription
+      $('#desLoanMoney').text("$"+loanMoney);
+      $('#desRateMoney').text(rateMoney);
+      $('#desTimeYear').text(timeYear);
+      $('#desPayment').text(payment);
+      $('#DesDepreciateDate').text(depreciateDate);
+
+      
+      // ប្រាក់កម្ចី = x, អត្រាការប្រាក់ក្នុងមួយឆ្នាំ = r, រយៈពេលបង់រំលោះ = t
+      var x = Number(loanMoney);
+      var r = rateMoney;
+      var t = timeYear;
+
+      // ការប្រាក់សរុប = (x * r)/100 * t
+      var interestTotal = ((x * r)/100) * t;
+      
+      // ប្រាក់បង់សរុប (ទាំងដើមទាំងការ) = x + ការប្រាក់សរុប
+      var total = x+interestTotal;
+
+      var resultDisplay = "";
+      // For Year
+      if(payment ==="ឆ្នាំ"){
+        // ប្រាក់ដែលត្រូវបង់ប្រចាំឆ្នាំ = ប្រាក់បង់សរុប / t
+        var payYear = total / t;
+        // ការប្រាក់ក្នុងមួយឆ្នាំ = ការប្រាក់សរុប / t
+        var interestYear = interestTotal / t;
+        // ប្រាក់សរុបដែលនៅសល់ក្នុងមួយឆ្នាំៗ = ប្រាក់បង់សរុប - ប្រាក់ដែលត្រូវបង់ប្រចាំឆ្នាំ
+        var totalAmountRemaining = total - payYear;
+          
+          resultDisplay =  '<tr  class="thb">';
+          resultDisplay += '<th scope="col">ល.រ</th>';
+          resultDisplay += '<th scope="col">ឆ្នាំទី</th>';
+          resultDisplay += '<th scope="col">ប្រាក់ត្រូវបង់(ក្នុងមួយឆ្នាំ)</th>';
+          resultDisplay += '<th>ការប្រាក់(ក្នុងមួយឆ្នាំ)</th>';
+          resultDisplay += '<th>ប្រាក់ដើមនៅសល់</th>';
+          resultDisplay += '</tr>';
+        
+        for(var i=1; i<= t; i++){
+          resultDisplay += '<tr>';
+          resultDisplay += '<td>'+i+'</td>';
+          resultDisplay += '<td>'+i+'</td>';
+          resultDisplay += '<td>$'+payYear.toFixed(2)+'</td>';
+          resultDisplay += '<td>$'+interestYear.toFixed(2)+'</td>';
+          resultDisplay += '<td>$'+totalAmountRemaining.toFixed(2)+'</td>';
+          resultDisplay += '</tr>';
+          totalAmountRemaining -=payYear; 
+        }
+        
+      }else if(payment ==="ខែ"){
+        // ប្រាក់ដែលត្រូវបង់ប្រចាំឆ្នាំ = ប្រាក់បង់សរុប / (t *12)
+        var payYear = total / (t*12);
+        // ការប្រាក់ក្នុងមួយឆ្នាំ = ការប្រាក់សរុប / (t *12)
+        var interestYear = interestTotal / (t*12);
+        // ប្រាក់សរុបដែលនៅសល់ក្នុងមួយឆ្នាំៗ = ប្រាក់បង់សរុប - ប្រាក់ដែលត្រូវបង់ប្រចាំឆ្នាំ
+        var totalAmountRemaining = total - payYear;
+
+          resultDisplay =  '<tr>';
+          resultDisplay += '<th>ល.រ</th>';
+          resultDisplay += '<th>ខែទី</th>';
+          resultDisplay += '<th>ប្រាក់ត្រូវបង់(ក្នុងមួយខែ)</th>';
+          resultDisplay += '<th>ការប្រាក់(ក្នុងមួយខែ)</th>';
+          resultDisplay += '<th>ប្រាក់ដើមនៅសល់</th>';
+          resultDisplay += '</tr>';
+
+        for(var i=1; i<= t*12; i++){
+          resultDisplay += '<tr>';
+          resultDisplay += '<td>'+i+'</td>';
+          resultDisplay += '<td>'+i+'</td>';
+          resultDisplay += '<td>$'+payYear.toFixed(2)+'</td>';
+          resultDisplay += '<td>$'+interestYear.toFixed(2)+'</td>';
+          resultDisplay += '<td>$'+totalAmountRemaining.toFixed(2)+'</td>';
+          resultDisplay += '</tr>';
+          totalAmountRemaining -=payYear; 
+        }
+
+      }
+          resultDisplay += '<tr>';
+          resultDisplay += '<td colspan="2"></td>';
+          resultDisplay += '<td>សរុបប្រាក់បង់៖ $'+total+'</td>';
+          resultDisplay += '<td colspan="2">សរុបការប្រាក់៖ $'+interestTotal+'</td>';
+          resultDisplay += '</tr>';
+      $("#tableData").html(resultDisplay);
+
+    });
+  });
+	</script>
+</body>
+</html>
